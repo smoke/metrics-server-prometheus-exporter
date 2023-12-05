@@ -1,1 +1,3 @@
-* Implementation of helm to deploy the above application in k8 cluster
+# metrics-server-prometheus-exporter Helm Chart
+
+

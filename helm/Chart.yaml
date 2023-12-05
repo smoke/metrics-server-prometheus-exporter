@@ -1,4 +1,4 @@
 apiVersion: v1
-description: Chart for prom-metric-server-Kubernetes
-name: metric-service-exporter
-version: 0.1.0
+description: Chart for metrics-server-prometheus-exporter
+name: metrics-server-prometheus-exporter
+version: 0.1.1
