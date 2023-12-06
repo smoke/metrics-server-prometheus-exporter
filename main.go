@@ -25,9 +25,10 @@ type Job struct {
 }
 
 var (
-	types      = []string{"pods", "nodes"}
-	workers    = 0
-	iterations = 0
+	types       = []string{"pods", "nodes"}
+	workers     = 2
+	iterations  = 0
+	interval, _ = time.ParseDuration("30s")
 
 	inflightCounterVec = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
@@ -40,8 +41,9 @@ var (
 	)
 )
 
-func initWorkers() {
-	flag.IntVar(&workers, "workers", 2, "Number of workers to use")
+func initFlags() {
+	flag.IntVar(&workers, "workers", workers, "Number of workers to use")
+	flag.DurationVar(&interval, "interval", interval, "Duration at which to collect data from the metrics server api")
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
@@ -58,7 +60,7 @@ func logRequestHandler(handler http.Handler) http.Handler {
 func main() {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 	zerolog.ParseLevel("info")
-	initWorkers()
+	initFlags()
 	flag.Parse()
 
 	log.Info().Msg("Checking kube-api. Searching for config file/service-accounts...")
