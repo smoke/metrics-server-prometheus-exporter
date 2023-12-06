@@ -7,6 +7,6 @@ roleRef:
   kind: ClusterRole
   name: {{ template "metric-service-exporter.fullname" . }}-view-metrics
 subjects:
-  - apiGroup: rbac.authorization.k8s.io
-    kind: User
-    name: system:serviceaccount:default:{{ template "metric-service-exporter.fullname" . }}
+  - kind: ServiceAccount
+    name: {{ template "metric-service-exporter.fullname" . }}
+    namespace: {{ .Release.Namespace }}

@@ -30,8 +30,10 @@ spec:
         prometheus.io/scrape: "true"
     spec:
       serviceAccountName: {{ template "metric-service-exporter.fullname" . }}
+      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        - name: docker-registry-credentials
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: {{ .Values.image }}
