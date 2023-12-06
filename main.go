@@ -67,7 +67,7 @@ func main() {
 	if status == false {
 		log.Error().Msg("Unable to verify kube config")
 	} else {
-		log.Error().Msg("Kube config verified successfully.")
+		log.Info().Msg("Kube config verified successfully.")
 	}
 
 	prometheus.MustRegister(
