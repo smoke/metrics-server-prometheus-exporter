@@ -11,7 +11,7 @@
 # limitations under the License.
 GOOS ?= linux
 GOARCH ?= amd64
-GO     ?= GO15VENDOREXPERIMENT=1 go
+GO     ?= go
 GOPATH := $(firstword $(subst :, ,$(shell $(GO) env GOPATH)))
 pkgs         = $(shell $(GO) list ./... | grep -v /vendor/)
 PREFIX                  ?= $(shell pwd)
@@ -19,7 +19,7 @@ BIN_DIR                 ?= $(shell pwd)
 DOCKER_IMAGE_NAME  ?= mercury200hg/metrics-server-prometheus-exporter
 DOCKER_IMAGE_TAG ?= $(subst /,-,$(shell git rev-parse --abbrev-ref HEAD))
 DOCKERFILE ?= Dockerfile
-all: vendor format build docker
+all: vendor format build
 vendor:
 	@echo ">> Adding vendors"
 	@$(GO) mod vendor

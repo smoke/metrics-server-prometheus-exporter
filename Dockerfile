@@ -1,15 +1,16 @@
-FROM ubuntu:20.04
+FROM golang:1.17 as base
 
-WORKDIR /var/opt
+FROM base as packages
+COPY go.mod go.sum /src/
+WORKDIR /src
+RUN CGO_ENABLED=0 go mod download
 
-COPY ./metrics-server-prometheus-exporter ./
+FROM packages as builder
+COPY . /src
+WORKDIR /src
+RUN CGO_ENABLED=0 make build
 
-RUN apt-get update \
-    && apt-get install -y curl \
-    && curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.22.5/bin/linux/amd64/kubectl \
-    && chmod +x ./kubectl \
-    && mv ./kubectl /usr/local/bin/kubectl
-
-EXPOSE 9100
-
-ENTRYPOINT [ "/var/opt/metrics-server-prometheus-exporter" ]
+FROM scratch AS exporter
+COPY --from=builder /src/metrics-server-prometheus-exporter /
+ENV HOME=/
+ENTRYPOINT ["/metrics-server-prometheus-exporter"]
